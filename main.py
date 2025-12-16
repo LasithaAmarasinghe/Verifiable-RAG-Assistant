@@ -14,7 +14,7 @@ import os
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 if GROQ_API_KEY is None or GROQ_API_KEY.startswith("PASTE"):
-    print("⚠️ Please set your Groq API Key in the environment variable 'GROQ_API_KEY'!")
+    print("Please set your Groq API Key in the environment variable 'GROQ_API_KEY'!")
     exit()
 
 os.environ["GROQ_API_KEY"] = GROQ_API_KEY
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     pdf_path = args.filename # Now it takes whatever you type!
     
     if not os.path.exists(pdf_path):
-        print(f"❌ ERROR: The file '{pdf_path}' does not exist.")
+        print(f" ERROR: The file '{pdf_path}' does not exist.")
     else:
         try:
             chain = build_hybrid_rag(pdf_path)
