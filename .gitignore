@@ -1,0 +1,16 @@
+# Python junk
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+.env
+.ipynb_checkpoints
+
+# The local Vector Database (Too big to upload)
+chroma_db/
+chroma_db_*/
+
+# Mac junk
+.DS_Store
