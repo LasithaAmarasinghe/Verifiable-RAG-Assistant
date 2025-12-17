@@ -1,6 +1,6 @@
 # 🧠 Verifiable RAG Assistant
 
-![Python](https://img.shields.io/badge/Python-3.10-blue) ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red) ![LangChain](https://img.shields.io/badge/LangChain-v0.3-green) ![Groq](https://img.shields.io/badge/Inference-Groq_LPU-orange)
+![Python](https://img.shields.io/badge/Python-3.10-blue) ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red) ![Architecture-Agentic](https://img.shields.io/badge/Architecture-Agentic_RAG-purple) ![Groq](https://img.shields.io/badge/Inference-Groq_LPU-orange)
 
 **A retrieval-augmented generation (RAG) system engineered for high-accuracy document analysis with source verification.** Unlike standard "Chat with PDF" tutorials, this project implements a **Hybrid Architecture** that decouples the embedding layer (Local CPU) from the inference layer (Groq Cloud) to optimize for both **latency** and **cost**.
 
@@ -16,12 +16,14 @@ This project moves beyond simple API wrapping by implementing a cost-efficient, 
 
 ## 🚀 Key Features
 
-- **Zero-Hallucination Protocol**: The system enforces strict adherence to provided context. If the answer isn't in the document, it explicitly states "I don't know" rather than fabricating facts.
-- **Multi-Document Support**: Capable of ingesting multiple PDFs simultaneously, creating a unified knowledge base for comparative analysis.
-- **Precise Citations**: Answers include the specific filename and page number (e.g., [Source: AlexNet.pdf: Page 2]), enabling cross-reference verification.
+- **Agentic "Router" Architecture**: The system intelligently decides whether to answer from the local PDFs or search the web.
+  - *Internal Questions:* Routed to the Vector DB for verified citations.
+  - *External Questions:* Routed to DuckDuckGo for real-time data (e.g., stock prices, news).
+- **Smart Query Refinement**: Before searching the web, the system analyzes the PDF context to refine the search query (e.g., converting "stock price of this company" -> "Microsoft stock price" based on document context).
+- **Zero-Hallucination Protocol**: Strict adherence to context. If information is missing in the PDF, it triggers a web search instead of fabricating facts.
 - **Hybrid Compute Model**:
-  - **Embeddings**: Calculated locally (all-MiniLM-L6-v2) to ensure data privacy for the indexing stage and zero ingestion cost.
-  - **Inference**: Offloaded to Groq LPUs (Language Processing Units) for near-instant text generation (approx. 300 tokens/sec).
+  - **Embeddings:** Calculated locally (`all-MiniLM-L6-v2`) for privacy and zero cost.
+  - **Inference:** Offloaded to **Groq LPUs** for sub-second generation.
 
 ---
 
@@ -36,8 +38,10 @@ I chose this specific stack to balance performance, privacy, and cost.
 | **Embeddings** | HuggingFace (Local)   | Running all-MiniLM-L6-v2 locally removes the dependency on paid APIs for document processing. It runs efficiently on standard CPUs. |
 | **Vector DB**  | ChromaDB              | Selected for its ability to run in-memory for development, avoiding the latency and complexity of cloud-based vector stores like Pinecone. |
 | **Chunking**   | RecursiveCharacter    | Instead of hard splits, this respects sentence boundaries and semantic flow, reducing "context fragmentation" errors. |
+| **Web Search** | DuckDuckGo | Selected for its privacy-focused, API-key-free access, enabling the system to fetch real-time external data without extra costs.|
 | **User Interface** | Streamlit | Provides a clean, interactive chat interface with drag-and-drop file support, making the tool accessible to non-engineers. |
 ---
+
 ## 🧐 Engineering Deep Dive (FAQ)
 
 These are the questions I asked myself during the design process.
@@ -52,7 +56,6 @@ These are the questions I asked myself during the design process.
    - I implemented `chunk_overlap=200`. When splitting text, vital context often exists at the boundaries of chunks. Overlapping ensures that semantic meaning flows across splits, improving retrieval accuracy for queries that span multiple paragraphs.
 
 ---
-
 
 ## ⚡Challenges & Solutions
 
@@ -108,6 +111,12 @@ Run the full chat application with multi-PDF support.
 ```bash
 streamlit run app.py
 ```
+### Example Questions to Try
+
+1. **The Specific:** "What is the kernel size in AlexNet?" (Retrieves from PDF)
+2. **The Comparative:** "Compare the depth of VGG-16 and ResNet-152." (Synthesizes multiple PDFs)
+3. **The Agentic (Hybrid):** "Who are the authors of the ResNet paper, and what is the current stock price of the company they worked for?" (Combines PDF authors with Web Search for stock price).
+
 ---
 ## 🚀 Future Improvements
 
