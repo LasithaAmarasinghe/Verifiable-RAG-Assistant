@@ -46,7 +46,7 @@ if api_key and uploaded_files:
         st.session_state.vector_db = None
         st.session_state.messages = []
         st.session_state.processed_file_ids = current_file_ids
-        st.write("🔄 Documents changed. Rebuilding index...")
+        st.write("Documents changed. Rebuilding index...")
 
     # Initialize Vector DB (With Optimized Chunk Sizes)
     if st.session_state.vector_db is None:
@@ -69,7 +69,7 @@ if api_key and uploaded_files:
                 
             embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
             st.session_state.vector_db = Chroma.from_documents(documents=all_splits, embedding=embeddings)
-            status.update(label="✅ Ready to Search!", state="complete")
+            status.update(label="Ready to Search!", state="complete")
 
     # Chat Interface
     if "messages" not in st.session_state:
@@ -116,7 +116,7 @@ if api_key and uploaded_files:
 
                 # --- PHASE 2: WEB SEARCH FALLBACK (Smart Query Refinement) ---
                 if "SEARCH_WEB" in answer:
-                    with st.spinner("🔍 Refining search query..."):
+                    with st.spinner("Refining search query..."):
                         # Step 1: Extract the Entity from PDF Context (The "Smart" Step)
                         # We use the retrieve context to find "Microsoft" first
                         pdf_context = ""
@@ -142,7 +142,7 @@ if api_key and uploaded_files:
                         
                         st.write(f"**Searching Web for:** *{optimized_query}*") # Debug info for Demo
 
-                    with st.spinner(f"Searching: {optimized_query} 🌍"):
+                    with st.spinner(f"Searching: {optimized_query}"):
                         # Step 2: Search with the OPTIMIZED query (e.g., "Microsoft stock price")
                         search = DuckDuckGoSearchRun()
                         web_results = search.run(optimized_query)
