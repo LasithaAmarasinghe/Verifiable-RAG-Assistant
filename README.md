@@ -75,6 +75,26 @@ Real-world problems encountered during development and how they were solved.
    - Refactored the code to use llama-3.1-8b-instant.
    - Abstracted the model name into a configuration variable to make future upgrades seamless without touching core logic.
 
+3. **The "Rate Limit" Wall (Groq Free Tier)**
+   - The standard RAG pipeline with large PDF chunks quickly hit Groq's `6000 TPM` (Tokens Per Minute) limit, causing 413 Errors.
+   
+   **Solution:** 
+   - I implemented an **Optimized Ingestion Strategy**:
+      - Reduced chunk size from `1000` to `500` characters.
+      - Lowered retrieval count (`k`) from `3` to `2`.
+      - Added a hard truncation limit (`2000 chars`) on tool outputs to guarantee API stability.
+
+4. **The "Ambiguous Search" Problem**
+   - When asking "What is the stock price of *this* company?", the web search tool would fail because it didn't know which company the PDF was talking about.
+   
+   **Solution:** 
+   - I built a **Query Refinement Step**. Before searching, the LLM reads the PDF context, extracts the entity name (e.g., "Microsoft"), and rewrites the search query (e.g., "Microsoft current stock price") for high-precision results.
+
+5. **Small Model Tool Calling**
+   - Llama-3-8b often struggled with strict JSON function calling, leading to parsing errors.
+   
+   **Solution:** 
+   - I switched to a **Router Pattern** using robust Python logic (`if "SEARCH_WEB" in response`) instead of relying on the fragile native function calling API. This increased system stability to near 100%.
 ---
 
 ## ⚡ Quick Start
