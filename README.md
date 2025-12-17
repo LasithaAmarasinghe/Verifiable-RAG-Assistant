@@ -4,13 +4,18 @@
 
 **A retrieval-augmented generation (RAG) system engineered for high-accuracy document analysis with source verification.** Unlike standard "Chat with PDF" tutorials, this project implements a **Hybrid Architecture** that decouples the embedding layer (Local CPU) from the inference layer (Groq Cloud) to optimize for both **latency** and **cost**.
 
+<p align="center">
+  <img src="https://github.com/LasithaAmarasinghe/Verifiable-RAG-Assistant/resources/demo.gif" alt="Demo GIF" />
+</p>
+
+
 ---
 
 ## 🏗️ Architecture & System Design
 
 This project moves beyond simple API wrapping by implementing a cost-efficient, high-performance pipeline:
 
-![pipeline](images/pipeline.png)
+![pipeline](resources/pipeline.png)
 
 ---
 
