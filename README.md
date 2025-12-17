@@ -104,7 +104,6 @@ os.environ["GROQ_API_KEY"] = "gsk_..."
 
 ### Usage
 
-**Option A: Web Interface (Recommended)**
 Run the full chat application with multi-PDF support.
 ```bash
 streamlit run app.py

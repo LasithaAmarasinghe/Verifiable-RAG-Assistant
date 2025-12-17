@@ -12,7 +12,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 # --- CONFIGURATION ---
 st.set_page_config(page_title="RAG Knowledge Base", layout="wide")
-st.title("📚 Multi-Source Research Assistant")
+st.title("📚 Verifiable RAG Assistant")
 
 # --- SIDEBAR: SETTINGS ---
 with st.sidebar:
